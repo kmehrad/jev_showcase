@@ -86,6 +86,8 @@ Each call is logged to `breakout/runs/*.jsonl` (features, choice, probabilities,
 latency, model) along with `physics_answer`, the exact answer computed from the trajectory;
 the summary reports Jev's agreement with it.
 
+See [JEV_PLAYER.md](JEV_PLAYER.md) for the full question, the state sent to Jev, a worked example, and results.
+
 
 ## Files
 
@@ -97,6 +99,7 @@ the summary reports Jev's agreement with it.
 | `server.py` | Static file server + agent bridge |
 | `agent_client.py` | Rule-based example agent and shared bridge helpers |
 | `jev_agent.py` | Jev-controlled player (TypeSafe SDK) |
+| `JEV_PLAYER.md` | How Jev plays: question, state, decision loop, results |
 
 Headless simulation in Node:
 
