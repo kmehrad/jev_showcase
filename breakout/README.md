@@ -62,11 +62,29 @@ State example (coordinates in a 800×600 board, origin top-left, velocities in p
 
 `status` is one of `ready` (ball on paddle, waiting for `launch`), `playing`, `paused`, `gameover`.
 
-### Plugging in an agent
+### Jev as the player
 
-`agent_client.py` is a rule-based example player. To build another agent (e.g. one backed by Jev),
-replace `decide(state)` with your own policy returning the same dict shape, and run the page with
-`?agent=1&lockstep=1` so slow decisions do not cost lives.
+```bash
+python breakout/server.py                                   # terminal 1
+# browser: http://localhost:8000/?agent=1&lockstep=1
+uv run python breakout/jev_agent.py                         # terminal 2 (needs TYPESAFE_API_KEY in .env)
+```
+
+While the ball is falling, `jev_agent.py` sends Jev a small feature dict for each new state as the
+`state` of `client.system_one(...)` and asks one `Choice` question: `left` / `right` / `stay`.
+Launching and waiting while the ball rises are handled in code (no API call). Answers below
+`--min-confidence` (default 0.6) keep the previous move. Every call is billed; `--max-calls`
+(default 200) caps a run. `--features` picks how much is pre-computed:
+
+| `--features` | Jev receives |
+|---|---|
+| `raw` | ball x/y/vx/vy, paddle centre, board width |
+| `relative` (default) | ball offset from paddle centre, horizontal speed per frame, frames until the ball reaches the paddle |
+| `predicted` | `relative` plus the predicted landing offset (wall bounces solved in code) |
+
+Each call is logged to `breakout/runs/*.jsonl` (features, choice, probabilities, confidence,
+latency, model) along with `physics_answer`, the exact answer computed from the trajectory;
+the summary reports Jev's agreement with it.
 
 ## Files
 
@@ -77,6 +95,7 @@ replace `decide(state)` with your own policy returning the same dict shape, and 
 | `main.js` | Rendering, input, game loop, agent bridge client |
 | `server.py` | Static file server + agent bridge |
 | `agent_client.py` | Rule-based example agent and shared bridge helpers |
+| `jev_agent.py` | Jev-controlled player (TypeSafe SDK) |
 
 Headless simulation in Node:
 
