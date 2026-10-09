@@ -1,0 +1,15 @@
+[project]
+name = "jev-showcase"
+version = "0.1.0"
+description = "Hands-on Jev System One notebook"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+  "typesafe-sdk",
+  "python-dotenv>=1.0,<2",
+  "jupyterlab>=4,<5",
+  "ipykernel>=6,<8",
+  "matplotlib>=3.8,<4",
+]
+
+[tool.uv]
+package = false
