@@ -86,6 +86,7 @@ Each call is logged to `breakout/runs/*.jsonl` (features, choice, probabilities,
 latency, model) along with `physics_answer`, the exact answer computed from the trajectory;
 the summary reports Jev's agreement with it.
 
+
 ## Files
 
 | File | Purpose |
